@@ -10,6 +10,11 @@ from boardHelpers import (
     boardStr
 )
 
+try:
+    BIG_NUM = sys.maxint # Python 2
+except AttributeError:
+    BIG_NUM = sys.maxsize # Python 3
+
 
 class Player(object):
     def nextMove(self, board):
@@ -20,7 +25,7 @@ class Human(Player):
         moveChosen = False
         while not moveChosen:
             print(boardStr(board))
-            colIdx = raw_input('Which column?\n')
+            colIdx = input('Which column?\n')
             try:
                 colIdx = int(colIdx)
             except ValueError:
@@ -83,7 +88,7 @@ def miniMax(symbol, vsSymbol, board, heuristic, maxDepth, currentDepth):
     else:
         colIdxOptions = getAvailableColumns(board)
         bestOptions = []
-        bestValue = -sys.maxint
+        bestValue = -BIG_NUM
         for colIdx in colIdxOptions:
             newBoard = applyMoveToNewBoard(board, colIdx, symbol)
             newDepth = currentDepth + 1

@@ -59,7 +59,7 @@ class Game(object):
         if verbose:
             print(self)
         if pause:
-            raw_input()
+            input()
 
 class MoveOutOfRange(Exception):
     pass
