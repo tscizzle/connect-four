@@ -140,14 +140,14 @@ def heuristicMaker(nonAbsoluteHeuristic, **kwargs):
     return heuristic
 
 
-def allOrNothingHeuristic(symbol, vsSymbol, board):
+def allOrNothing(symbol, vsSymbol, board):
     return 0
 
 
-allOrNothingHeuristic = heuristicMaker(allOrNothingHeuristic)
+allOrNothingHeuristic = heuristicMaker(allOrNothing)
 
 
-def centeringHeuristic(symbol, vsSymbol, board):
+def centering(symbol, vsSymbol, board):
     avgDist = getCenteringMetric(board, symbol)
     vsAvgDist = getCenteringMetric(board, vsSymbol)
     if avgDist is None or vsAvgDist is None:
@@ -159,10 +159,10 @@ def centeringHeuristic(symbol, vsSymbol, board):
     return value
 
 
-centeringHeuristic = heuristicMaker(centeringHeuristic)
+centeringHeuristic = heuristicMaker(centering)
 
 
-def mostInARowHeuristic(symbol, vsSymbol, board, allowBlanks=False):
+def mostInARow(symbol, vsSymbol, board, allowBlanks=False):
     mostInARow, mostInARowFreq = getInARowMetric(board, symbol, allowBlanks)
     vsMostInARow, vsMostInARowFreq = getInARowMetric(board, vsSymbol, allowBlanks)
     if mostInARow is None or vsMostInARow is None:
@@ -180,5 +180,5 @@ def mostInARowHeuristic(symbol, vsSymbol, board, allowBlanks=False):
     return value
 
 
-mostInARowHeuristic = heuristicMaker(mostInARowHeuristic, allowBlanks=False)
-mostInARowAllowBlanksHeuristic = heuristicMaker(mostInARowHeuristic, allowBlanks=True)
+mostInARowHeuristic = heuristicMaker(mostInARow, allowBlanks=False)
+mostInARowAllowBlanksHeuristic = heuristicMaker(mostInARow, allowBlanks=True)

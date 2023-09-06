@@ -12,16 +12,18 @@ from player import (
 def main():
     players = [
         # AllOrNothingBot(maxDepth=4),
-        CenteringBot(maxDepth=4),
+        # CenteringBot(maxDepth=4),
         # InARowBot(maxDepth=4),
-        # InARowAllowBlanksBot(maxDepth=4),
+        InARowAllowBlanksBot(maxDepth=4),
+        # RandomBot(),
         # Human(),
         #
         # AllOrNothingBot(maxDepth=4),
-        # CenteringBot(maxDepth=4),
+        CenteringBot(maxDepth=4),
         # InARowBot(maxDepth=4),
         # InARowAllowBlanksBot(maxDepth=4),
-        Human(),
+        # RandomBot(),
+        # Human(),
     ]
 
     game = Game(players=players)
