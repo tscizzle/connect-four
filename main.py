@@ -5,7 +5,7 @@ from player import (
     AllOrNothingBot,
     CenteringBot,
     InARowBot,
-    InARowAllowBlanksBot
+    InARowAllowBlanksBot,
 )
 
 
@@ -16,7 +16,7 @@ def main():
         # InARowBot(maxDepth=4),
         # InARowAllowBlanksBot(maxDepth=4),
         # Human(),
-
+        #
         # AllOrNothingBot(maxDepth=4),
         # CenteringBot(maxDepth=4),
         # InARowBot(maxDepth=4),
@@ -27,14 +27,11 @@ def main():
     game = Game(players=players)
 
     while not game.isEnded():
-        game.takeTurn(
-            verbose=True,
-            pause=True
-        )
+        game.takeTurn(verbose=True, pause=True)
 
     print(game)
     game.showWhoWon()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

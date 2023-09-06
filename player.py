@@ -7,20 +7,21 @@ from boardHelpers import (
     getWinner,
     getCenteringMetric,
     getInARowMetric,
-    boardStr
+    boardStr,
 )
 
 
 class Player(object):
     def nextMove(self, board):
-        raise Exception('Player subclass must define the nextMove method.')
+        raise Exception("Player subclass must define the nextMove method.")
+
 
 class Human(Player):
     def nextMove(self, board):
         moveChosen = False
         while not moveChosen:
             print(boardStr(board))
-            colIdx = input('Which column?\n')
+            colIdx = input("Which column?\n")
             try:
                 colIdx = int(colIdx)
             except ValueError:
@@ -29,7 +30,9 @@ class Human(Player):
                 moveChosen = True
         return colIdx
 
+
 # Bots
+
 
 class RandomBot(Player):
     def nextMove(self, board):
@@ -37,27 +40,34 @@ class RandomBot(Player):
         colIdx = random.choice(availableCols)
         return colIdx
 
+
 class MiniMaxPlayer(Player):
     def __init__(self, maxDepth=4):
         self.maxDepth = maxDepth
+
 
 class AllOrNothingBot(MiniMaxPlayer):
     def nextMove(self, board):
         return miniMaxMove(self, board, allOrNothingHeuristic)
 
+
 class CenteringBot(MiniMaxPlayer):
     def nextMove(self, board):
         return miniMaxMove(self, board, centeringHeuristic)
+
 
 class InARowBot(MiniMaxPlayer):
     def nextMove(self, board):
         return miniMaxMove(self, board, mostInARowHeuristic)
 
+
 class InARowAllowBlanksBot(MiniMaxPlayer):
     def nextMove(self, board):
         return miniMaxMove(self, board, mostInARowAllowBlanksHeuristic)
 
+
 # Minimax
+
 
 def miniMaxMove(player, board, heuristic):
     symbol = player.symbol
@@ -69,9 +79,10 @@ def miniMaxMove(player, board, heuristic):
         board=board,
         heuristic=heuristic,
         maxDepth=maxDepth,
-        currentDepth=0
+        currentDepth=0,
     )
     return random.choice(colIdxs)
+
 
 def miniMax(symbol, vsSymbol, board, heuristic, maxDepth, currentDepth):
     value = heuristic(symbol, vsSymbol, board)
@@ -93,7 +104,7 @@ def miniMax(symbol, vsSymbol, board, heuristic, maxDepth, currentDepth):
                 board=newBoard,
                 heuristic=heuristic,
                 maxDepth=maxDepth,
-                currentDepth=newDepth
+                currentDepth=newDepth,
             )
             newValue = -vsValue
             if newValue > bestValue:
@@ -103,7 +114,9 @@ def miniMax(symbol, vsSymbol, board, heuristic, maxDepth, currentDepth):
                 bestOptions.append(colIdx)
         return bestOptions, bestValue
 
+
 # Heuristics
+
 
 def heuristicMaker(nonAbsoluteHeuristic, **kwargs):
     """
@@ -113,6 +126,7 @@ def heuristicMaker(nonAbsoluteHeuristic, **kwargs):
     heuristicMaker takes this, and combines it with the obvious cases of when
     the board has a winner, and returns 1 for a win and -1 for a loss.
     """
+
     def heuristic(symbol, vsSymbol, board):
         winningSymbol = getWinner(board)
         if winningSymbol == symbol:
@@ -122,11 +136,16 @@ def heuristicMaker(nonAbsoluteHeuristic, **kwargs):
         else:
             value = nonAbsoluteHeuristic(symbol, vsSymbol, board, **kwargs)
         return value
+
     return heuristic
+
 
 def allOrNothingHeuristic(symbol, vsSymbol, board):
     return 0
+
+
 allOrNothingHeuristic = heuristicMaker(allOrNothingHeuristic)
+
 
 def centeringHeuristic(symbol, vsSymbol, board):
     avgDist = getCenteringMetric(board, symbol)
@@ -138,13 +157,14 @@ def centeringHeuristic(symbol, vsSymbol, board):
     else:
         value = 0.9 * (vsAvgDist - avgDist) / (avgDist + vsAvgDist)
     return value
+
+
 centeringHeuristic = heuristicMaker(centeringHeuristic)
+
 
 def mostInARowHeuristic(symbol, vsSymbol, board, allowBlanks=False):
     mostInARow, mostInARowFreq = getInARowMetric(board, symbol, allowBlanks)
-    vsMostInARow, vsMostInARowFreq = getInARowMetric(board,
-                                                     vsSymbol,
-                                                     allowBlanks)
+    vsMostInARow, vsMostInARowFreq = getInARowMetric(board, vsSymbol, allowBlanks)
     if mostInARow is None or vsMostInARow is None:
         value = 0
     else:
@@ -153,9 +173,12 @@ def mostInARowHeuristic(symbol, vsSymbol, board, allowBlanks=False):
         numSpaces = float(numCols * numRows)
         mostInARowWithFreq = mostInARow + (mostInARowFreq / numSpaces)
         vsMostInARowWithFreq = vsMostInARow + (vsMostInARowFreq / numSpaces)
-        value = 0.9 * ((mostInARowWithFreq - vsMostInARowWithFreq) /
-                       (mostInARowWithFreq + vsMostInARowWithFreq))
+        value = 0.9 * (
+            (mostInARowWithFreq - vsMostInARowWithFreq)
+            / (mostInARowWithFreq + vsMostInARowWithFreq)
+        )
     return value
+
+
 mostInARowHeuristic = heuristicMaker(mostInARowHeuristic, allowBlanks=False)
-mostInARowAllowBlanksHeuristic = heuristicMaker(mostInARowHeuristic,
-                                                allowBlanks=True)
+mostInARowAllowBlanksHeuristic = heuristicMaker(mostInARowHeuristic, allowBlanks=True)

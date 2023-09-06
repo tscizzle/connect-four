@@ -7,14 +7,14 @@ class Game(object):
     def __init__(self, players, numCols=7, numRows=6):
         self.numCols = numCols
         self.numRows = numRows
-        self.board =  [[None for _ in range(numRows)] for _ in range(numCols)]
+        self.board = [[None for _ in range(numRows)] for _ in range(numCols)]
         self.numMovesSoFar = 0
 
         self.players = players
-        self.players[0].symbol = 'X'
-        self.players[0].vsSymbol = 'O'
-        self.players[1].symbol = 'O'
-        self.players[1].vsSymbol = 'X'
+        self.players[0].symbol = "X"
+        self.players[0].vsSymbol = "O"
+        self.players[1].symbol = "O"
+        self.players[1].vsSymbol = "X"
 
     def __str__(self):
         return boardStr(self.board)
@@ -24,7 +24,7 @@ class Game(object):
 
     def showWhoWon(self):
         winningSymbol = getWinner(self.board)
-        print('%s wins!' % winningSymbol if winningSymbol else 'It was a tie.')
+        print("%s wins!" % winningSymbol if winningSymbol else "It was a tie.")
 
     def nextPlayer(self):
         return self.players[self.numMovesSoFar % len(self.players)]
@@ -42,9 +42,9 @@ class Game(object):
                 if all(column):
                     raise ColumnIsFull
             except MoveOutOfRange:
-                print('%s is not from 0 through %s.' % (colIdx, maxCol))
+                print("%s is not from 0 through %s." % (colIdx, maxCol))
             except ColumnIsFull:
-                print('Column %s is full.' % colIdx)
+                print("Column %s is full." % colIdx)
             else:
                 moveMade = True
             if not moveMade:
@@ -61,8 +61,10 @@ class Game(object):
         if pause:
             input()
 
+
 class MoveOutOfRange(Exception):
     pass
+
 
 class ColumnIsFull(Exception):
     pass

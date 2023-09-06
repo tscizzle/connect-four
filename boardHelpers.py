@@ -7,19 +7,21 @@ def isInBounds(board, colIdx, rowIdx):
     numRows = len(board[0])
     return 0 <= colIdx < numCols and 0 <= rowIdx < numRows
 
+
 def getStartsHowManyInARow(board, colIdx, rowIdx, allowBlanks=False):
     symbol = board[colIdx][rowIdx]
     if symbol is None:
         return 0
     bestInARow = 0
     directions = [(1, 0), (1, -1), (0, -1), (-1, -1)]
-    for (colStep, rowStep) in directions:
+    for colStep, rowStep in directions:
         colCursor = colIdx
         rowCursor = rowIdx
         numInARowSoFar = 0
-        while (isInBounds(board, colCursor, rowCursor) and
-               (board[colCursor][rowCursor] == symbol or
-                (allowBlanks and board[colCursor][rowCursor] is None))):
+        while isInBounds(board, colCursor, rowCursor) and (
+            board[colCursor][rowCursor] == symbol
+            or (allowBlanks and board[colCursor][rowCursor] is None)
+        ):
             if board[colCursor][rowCursor] == symbol:
                 numInARowSoFar += 1
             rowCursor = rowCursor + rowStep
@@ -28,8 +30,10 @@ def getStartsHowManyInARow(board, colIdx, rowIdx, allowBlanks=False):
             bestInARow = numInARowSoFar
     return bestInARow
 
+
 def isStartsFourInARow(board, colIdx, rowIdx):
     return getStartsHowManyInARow(board, colIdx, rowIdx) >= 4
+
 
 def applyMoveToNewBoard(board, colIdx, symbol):
     column = board[colIdx]
@@ -39,11 +43,14 @@ def applyMoveToNewBoard(board, colIdx, symbol):
             break
         rowIdx += 1
     newBoard = [
-        [symbol if r == rowIdx and c == colIdx else existingSymbol
-         for r, existingSymbol in enumerate(column)]
+        [
+            symbol if r == rowIdx and c == colIdx else existingSymbol
+            for r, existingSymbol in enumerate(column)
+        ]
         for c, column in enumerate(board)
     ]
     return newBoard
+
 
 def getAvailableColumns(board):
     availableCols = []
@@ -51,6 +58,7 @@ def getAvailableColumns(board):
         if not all(column):
             availableCols.append(idx)
     return availableCols
+
 
 def getWinner(board):
     numCols = len(board)
@@ -62,28 +70,32 @@ def getWinner(board):
                 return symbol
     return False
 
+
 def isFull(board):
     return all(all(column) for column in board)
 
+
 # Heauristic Helpers
+
 
 def getCenteringMetric(board, symbol):
     middleCol = (len(board) - 1) / 2.0
-    dists = [abs(colIdx - middleCol)
-             for colIdx, column in enumerate(board) for s in column
-             if s == symbol]
+    dists = [
+        abs(colIdx - middleCol)
+        for colIdx, column in enumerate(board)
+        for s in column
+        if s == symbol
+    ]
     avgDist = sum(dists) / float(len(dists)) if dists else None
     return avgDist
+
 
 def getInARowMetric(board, symbol, allowBlanks=False):
     inARowCounts = defaultdict(int)
     for colIdx, column in enumerate(board):
         for rowIdx, _ in enumerate(column):
             if board[colIdx][rowIdx] == symbol:
-                inARow = getStartsHowManyInARow(board,
-                                                colIdx,
-                                                rowIdx,
-                                                allowBlanks)
+                inARow = getStartsHowManyInARow(board, colIdx, rowIdx, allowBlanks)
                 inARowCounts[inARow] += 1
     if len(inARowCounts.keys()) == 0:
         return None, None
@@ -91,7 +103,9 @@ def getInARowMetric(board, symbol, allowBlanks=False):
     mostInARowFreq = inARowCounts[mostInARow]
     return mostInARow, mostInARowFreq
 
+
 # Printing
+
 
 def boardStr(board):
     numCols = len(board)
@@ -99,8 +113,8 @@ def boardStr(board):
     sio = StringIO()
     for rowIdx in reversed(range(numRows)):
         for colIdx in range(numCols):
-            symbol = board[colIdx][rowIdx] or '-'
-            sio.write(' %s' % symbol)
-        sio.write('\n')
+            symbol = board[colIdx][rowIdx] or "-"
+            sio.write(" %s" % symbol)
+        sio.write("\n")
     result = sio.getvalue()
     return result
