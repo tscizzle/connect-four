@@ -20,7 +20,7 @@ class Human(Player):
         moveChosen = False
         while not moveChosen:
             print(boardStr(board))
-            colIdx = raw_input('Which column?\n')
+            colIdx = input('Which column?\n')
             try:
                 colIdx = int(colIdx)
             except ValueError:
@@ -83,7 +83,7 @@ def miniMax(symbol, vsSymbol, board, heuristic, maxDepth, currentDepth):
     else:
         colIdxOptions = getAvailableColumns(board)
         bestOptions = []
-        bestValue = -sys.maxint
+        bestValue = -sys.maxsize
         for colIdx in colIdxOptions:
             newBoard = applyMoveToNewBoard(board, colIdx, symbol)
             newDepth = currentDepth + 1
@@ -113,7 +113,7 @@ def heuristicMaker(nonAbsoluteHeuristic, **kwargs):
     heuristicMaker takes this, and combines it with the obvious cases of when
     the board has a winner, and returns 1 for a win and -1 for a loss.
     """
-    def heuristic(symbol, vsSymbol, board, **kwargs):
+    def heuristic(symbol, vsSymbol, board):
         winningSymbol = getWinner(board)
         if winningSymbol == symbol:
             value = 1

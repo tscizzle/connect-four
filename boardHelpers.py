@@ -1,5 +1,5 @@
 from collections import defaultdict
-import StringIO
+from io import StringIO
 
 
 def isInBounds(board, colIdx, rowIdx):
@@ -96,7 +96,7 @@ def getInARowMetric(board, symbol, allowBlanks=False):
 def boardStr(board):
     numCols = len(board)
     numRows = len(board[0])
-    sio = StringIO.StringIO()
+    sio = StringIO()
     for rowIdx in reversed(range(numRows)):
         for colIdx in range(numCols):
             symbol = board[colIdx][rowIdx] or '-'
